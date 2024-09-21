@@ -1,0 +1,182 @@
+:root {
+    --main-color: #00b1c7;
+    --secondary-color: #414042;
+    --border-color: #00c2db;
+    --tertiary-color: #6c757d;
+    --font-family: 'Encode Sans', sans-serif;
+}
+
+/* General Styles */
+body,
+html {
+    font-family: var(--font-family), 'Roboto', sans-serif;
+    color: var(--secondary-color);
+    background: url('../assets/img/pulmon.jpg') no-repeat center center fixed;
+    background-color: #000000;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    /*overflow-x: hidden;*/
+    /* Oculta el scroll horizontal */
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+
+.content-wrapper {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    /* Asegúrate de que los elementos no se desborden */
+}
+
+.col {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+/* Card */
+.card {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    color: white;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container {
+    background-color: rgba(132, 130, 130, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.botonera {
+
+    /*margin: auto;*/
+    padding: 20px;
+}
+
+/* Typography */
+h1,
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--main-color);
+}
+
+.titulo {
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 500;
+    color: var(--main-color);
+}
+
+.bajada {
+    font-size: clamp(1.5rem, 2vw, 2.5rem);
+    color: #fafafa;
+}
+
+input {
+    width: 100%;
+    height: 2em;
+}
+
+form {
+    overflow: hidden;
+    padding: auto;
+}
+
+/* Buttons */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+    margin: 1.5em auto;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Footer */
+footer {
+    background: transparent;
+    color: #cfcfcf;
+    font-size: .775em;
+    padding: 0rem 2rem;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+}
+
+@media (max-width: 900px) {
+
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+}
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .col {
+        width: 100%;
+    }
+
+    .container {
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 600px) {
+    .btn {
+        font-size: 16px;
+    }
+}
