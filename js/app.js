@@ -14,6 +14,15 @@ document.getElementById('diagnostic-form').addEventListener('submit', async func
     const doctorName = document.getElementById('doctorName').value;
     const imageInput = document.getElementById('imageInput').files[0];
 
+
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    if (!allowedExtensions.exec(imageInput.name)) {
+        alert('Por favor, selecciona un archivo de imagen válido (JPG, JPEG, PNG).');
+        document.getElementById('loading').style.display = 'none';
+        return;
+    }
+
+
     // Validaciones básicas
     if (!imageInput || !patientName || !patientDni || !doctorName) {
         alert('Por favor, completa todos los campos y selecciona una imagen.');
@@ -28,7 +37,12 @@ document.getElementById('diagnostic-form').addEventListener('submit', async func
     formData.append('patientName', patientName);
     formData.append('patientDni', patientDni);
     formData.append('doctorName', doctorName);
-    formData.append('image', imageInput);  // Asegúrate de que "image" es el nombre esperado por la API
+    formData.append('image', imageInput);
+
+    // Verifica que los datos sean correctos antes de enviarlos
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+    }
 
     try {
         // Realizar la solicitud a la API
