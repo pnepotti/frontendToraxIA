@@ -73,7 +73,7 @@ body::before {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -82,7 +82,7 @@ body::before {
 
 .botonera {
 
-    margin-bottom: 2em;
+    margin-bottom: 4em;
     /*padding: 20px;*/
     color: rgb(154, 154, 154);
 }
@@ -146,6 +146,7 @@ form {
 
 #result {
     display: none;
+    margin-bottom: 2em;
 }
 
 

@@ -349,9 +349,6 @@
                     <input type="file" id="imageInput" name="imageInput" accept="image/*" required>
                     <img id="imagen" alt="Vista previa de la imagen seleccionada">
                     <button class="btn" id="predictButton" type="submit">Predecir</button>
-                    <button class="btn" id="LimpiarButton" type="button">Borrar</button>
-                    <button class="btn" id="volverButton" type="button"
-                        onclick="window.location.href='./index.html'">Volver</button>
                 </form>
                 <div id="loading" style="display: none;">Procesando imagen...</div>
                 <div id="result">
@@ -359,7 +356,6 @@
                     <table id="predictionTable">
                         <thead>
                             <tr>
-                                <th>Imagen</th>
                                 <th>Predicción</th>
                                 <th>Probabilidad</th>
                                 <th>Presición</th>
@@ -369,6 +365,9 @@
                         <tbody id="predictionTableBody"></tbody>
                     </table>
                 </div>
+                <button class="btn" id="LimpiarButton" type="button">Borrar</button>
+                <button class="btn" id="volverButton" type="button"
+                    onclick="window.location.href='./index.html'">Volver</button>
             </div>
         </div>
     </div>

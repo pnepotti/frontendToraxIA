@@ -57,14 +57,19 @@ document.getElementById('diagnostic-form').addEventListener('submit', async func
 
         const data = await response.json();
 
-        // Mostrar el resultado del diagnóstico
-        document.getElementById('imagen').innerHTML = document.getElementById('imageInput').files[0];
-        document.getElementById('result').innerHTML = `Diagnóstico: ${data.diagnosis}`;  // Asegúrate de que "diagnosis" sea el campo correcto
+        // Manejo de respuesta cuando no es una radiografía de tórax
+        if (data.message) {
+            document.getElementById('result').innerHTML = `Aviso: ${data.message}`;  // Mostrar que no es una radiografía de tórax
+        } else {
+            // Mostrar el resultado del diagnóstico
+            document.getElementById('result').innerHTML = `Resultado: ${data.diagnosis}`;  // Asegúrate de que "diagnosis" sea el campo correcto
+        }
     } catch (error) {
         console.error('Error al enviar la imagen:', error);
         document.getElementById('result').innerHTML = 'Hubo un error al procesar la imagen.';
     } finally {
         // Ocultar el mensaje de carga
+        document.getElementById('result').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
         document.getElementById('imagen').style.display = 'block';
     }
@@ -96,4 +101,5 @@ document.getElementById('LimpiarButton').addEventListener('click', function () {
     // Eliminar la vista previa de la imagen
     document.getElementById('imagen').src = '';
     document.getElementById('imagen').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
 });
