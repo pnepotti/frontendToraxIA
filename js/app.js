@@ -62,7 +62,14 @@ document.getElementById('diagnostic-form').addEventListener('submit', async func
             document.getElementById('result').innerHTML = `Aviso: ${data.message}`;  // Mostrar que no es una radiografía de tórax
         } else {
             // Mostrar el resultado del diagnóstico
-            document.getElementById('result').innerHTML = `Resultado: ${data.diagnosis}`;  // Asegúrate de que "diagnosis" sea el campo correcto
+
+            document.getElementById('result').innerHTML = `
+    <div><strong>Diagnóstico:</strong> ${data.diagnosis}</div>
+    <div><strong>Probabilidad:</strong> ${data.probability.toFixed(2)}</div>
+    <div><strong>Confianza:</strong> ${data.confidence.toFixed(2)}</div>
+    <div><strong>Incertidumbre:</strong> ${data.entropy.toFixed(2)}</div>
+`;
+
         }
     } catch (error) {
         console.error('Error al enviar la imagen:', error);

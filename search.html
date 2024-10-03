@@ -337,19 +337,20 @@
             </div>
         </div>
         <div class="container">
+            <div class="botonera">
+                <h1>Buscar Diagnósticos</h1><br><br>
+                <form method="POST" id="search-form">
+                    <input type="text" id="dni" name="search_value" placeholder="Ingresar DNI del paciente"
+                        required><br>
+                    <button class="btn" type="submit">Buscar</button>
+                    <button class="btn" id="LimpiarButton1" type="button"
+                        onclick="document.getElementById('search-form').reset()">Borrar</button>
+                    <button class="btn" id="volverButton" type="button"
+                        onclick="window.location.href='./index.html'">Volver</button>
 
-            <h1>Buscar Diagnósticos</h1><br><br>
-            <form method="POST" id="search-form">
-                <input type="text" id="dni" name="search_value" placeholder="Ingresar DNI del paciente" required><br>
-                <button class="btn" type="submit">Buscar</button>
-                <button class="btn" id="LimpiarButton1" type="button"
-                    onclick="document.getElementById('search-form').reset()">Borrar</button>
-                <button class="btn" id="volverButton" type="button"
-                    onclick="window.location.href='./index.html'">Volver</button>
 
-
-            </form>
-
+                </form>
+            </div>
         </div>
     </div>
     <footer class="footer intranet-footer">
