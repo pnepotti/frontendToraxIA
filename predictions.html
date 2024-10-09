@@ -340,15 +340,17 @@
                 <h1>Modelo de Predicción de Enfermedades</h1>
                 <br><br>
                 <form id="diagnostic-form">
+                    <input type="text" id="idEstudio" name="idEstudio" placeholder="Número de Estudio" required><br><br>
                     <input type="text" id="patientName" name="patientName" placeholder="Nombre del Paciente"
                         required><br><br>
                     <input type="text" id="patientDni" name="patientDni" placeholder="DNI del Paciente"
                         required><br><br>
                     <input type="text" id="doctorName" name="doctorName" placeholder="Nombre del Médico"
                         required><br><br>
+                    <button class="btn" id="confirmarButton" type="button">Confirmar Datos</button>
                     <input type="file" id="imageInput" name="imageInput" accept="image/*" required>
                     <img id="imagen" alt="Vista previa de la imagen seleccionada">
-                    <button class="btn" id="predictButton" type="submit">Predecir</button>
+                    <button class="btn" id="predictButton" type="submit">Predecir y Guardar</button>
                 </form>
                 <div id="loading" style="display: none;">Procesando imagen...</div>
                 <div id="result">
@@ -365,17 +367,15 @@
                         <tbody id="predictionTableBody"></tbody>
                     </table>-->
                 </div>
-                <button class="btn" id="LimpiarButton" type="button">Borrar</button>
+                <button class="btn" id="LimpiarButton" type="button">Nuevo Estudio</button>
                 <button class="btn" id="volverButton" type="button"
                     onclick="window.location.href='./index.html'">Volver</button>
             </div>
         </div>
     </div>
-    <footer class="footer intranet-footer">
-        <hr class="intranet-footer__hr">
-        <div class="intranet-footer__copy">
-            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente.
-        </div>
+    <footer class="footer">
+        <hr>
+        <div>© Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente.</div>
     </footer>
 
 

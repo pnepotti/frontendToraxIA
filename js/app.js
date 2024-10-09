@@ -98,6 +98,7 @@ document.getElementById('imageInput').addEventListener('change', function (event
         reader.readAsDataURL(file);
     }
 });
+
 document.getElementById('LimpiarButton').addEventListener('click', function () {
     // Obtener el formulario
     var form = document.getElementById('diagnostic-form');
@@ -105,8 +106,50 @@ document.getElementById('LimpiarButton').addEventListener('click', function () {
     // Reinicializar el formulario
     form.reset();
 
+    //Habilitar formulario
+    document.getElementById('idEstudio').disabled = false;
+    document.getElementById('patientName').disabled = false;
+    document.getElementById('patientDni').disabled = false;
+    document.getElementById('doctorName').disabled = false;
+
     // Eliminar la vista previa de la imagen
     document.getElementById('imagen').src = '';
     document.getElementById('imagen').style.display = 'none';
     document.getElementById('result').style.display = 'none';
+
+    document.getElementById('imageInput').style.display = 'none';
+    document.getElementById('LimpiarButton').style.display = 'none';
+    document.getElementById('predictButton').style.display = 'none';
 });
+
+document.getElementById('confirmarButton').addEventListener('click', function () {
+    const inputs = document.querySelectorAll('#diagnostic-form input');
+    let todosLlenos = true;
+
+    inputs.forEach(input => {
+        if (input.id !== 'imageInput' && input.value.trim() === '') {
+            todosLlenos = false;
+            input.style.border = '1px solid red'; // Marcar el campo vacío
+        } else if (input.id !== 'imageInput') {
+            input.style.border = ''; // Quitar la marca si está lleno
+        }
+    });
+
+    if (todosLlenos) {
+
+        // Deshabilitar inputs del formulario
+        document.getElementById('idEstudio').disabled = true;
+        document.getElementById('patientName').disabled = true;
+        document.getElementById('patientDni').disabled = true;
+        document.getElementById('doctorName').disabled = true;
+
+        // Mostrar otros elementos
+        document.getElementById('imageInput').style.display = 'block';
+        document.getElementById('LimpiarButton').style.display = 'block';
+        document.getElementById('predictButton').style.display = 'block';
+    } else {
+        alert('Por favor, llena todos los campos obligatorios.');
+    }
+});
+
+
