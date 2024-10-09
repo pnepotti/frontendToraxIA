@@ -47,7 +47,9 @@ body::before {
     position: relative;
     z-index: 2;
     overflow: hidden;
+    margin-bottom: 1.5em;
     /* Asegúrate de que los elementos no se desborden */
+
 }
 
 .col {
@@ -62,8 +64,9 @@ body::before {
     border-radius: 8px;
     color: white;
     padding: 20px;
-    margin: 1.5em 1.5em;
+    margin: 0em 1.5em;
     max-width: 100%;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -81,10 +84,9 @@ body::before {
 }
 
 .botonera {
-
-    margin-bottom: 4em;
     padding: 20px;
     color: rgb(154, 154, 154);
+    min-width: 400px;
 }
 
 /* Typography */
@@ -118,7 +120,7 @@ form {
 
 /* Buttons */
 .btn {
-    display: block;
+    /*display: block;*/
     width: 100%;
     padding: 15px;
     background-color: var(--main-color);
@@ -130,7 +132,7 @@ form {
     text-align: center;
     text-transform: uppercase;
     transition: background-color 0.3s ease;
-    margin: 2em auto;
+    margin: 1.5em auto;
 }
 
 .btn:hover {
@@ -149,17 +151,14 @@ form {
     margin-bottom: 2em;
 }
 
-#volverButton {
-    margin-top: 0;
-    width: 48%;
-    float: left;
+#predictButton {
+    margin-top: 1em;
 }
 
 #LimpiarButton,
-#LimpiarButton1 {
+#LimpiarButton1,
+#volverButton {
     margin-top: 0;
-    width: 48%;
-    float: right;
 }
 
 #predictionTable {
@@ -190,15 +189,16 @@ footer {
 
     }
 
+    .card {
+        margin: 0.5em 0em;
+    }
+
     .container {
         padding: 0;
     }
 
-    .botonera {
-        margin-top: 2em;
-    }
-
-    body {
+    body,
+    html {
         margin-top: 0;
     }
 
@@ -218,10 +218,15 @@ footer {
     .container {
         margin-top: 5px;
     }
+
 }
 
 @media (max-width: 600px) {
     .btn {
         font-size: 16px;
+    }
+
+    .botonera {
+        padding: 5px;
     }
 }
