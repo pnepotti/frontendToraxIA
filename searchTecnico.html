@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/vnd.microsoft.icon" href="./assets/img/favicon.ico">
-    <title>Torax iA - Modelo de predicciones</title>
+    <title>Torax iA - Búsqueda de diagnósticos</title>
     <link href="./css/style.css" rel="stylesheet">
+
 </head>
 
 <body>
-    <div class="content-wrapper">
+    <div class="content-wrapper"> <!-- Contenedor padre para flexbox -->
         <div class="col col-12 col-lg-7">
-            <div class="card intranet-card intranet-card--left">
+            <div class="card intranet-card intranet-card--left ">
                 <div class="card-body intranet-card__body">
                     <div class="logo">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 346.286 80.912">
@@ -330,73 +331,61 @@
                             </g>
                         </svg>
                     </div>
-                    <h1 class="titulo">TORAX iA</h1>
-                    <h2 class="bajada">Diagnósticos Rx</h2>
+                    <h1 class="titulo">TORAX IA</h1>
+                    <h2 class="bajada">BUSCADOR</h2>
                     <p>Radiólogo: <span id="nombreTecnico"></span></p>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="botonera">
-                <h1>Modelo de Predicción de Enfermedades</h1>
-                <br><br>
-                <form id="diagnostic-form">
-                    <h3>Seleccionar Paciente</h3>
-                    <label for="patientDni">Dni del Paciente</label>
-                    <input type="text" id="patientDni" name="patientDni">
-                    <button class="btn" id="buscarPatient" type="button">Buscar</button><br><br>
-
-                    <label for="patientName">Nombre del Paciente</label><br>
-                    <input type="text" id="patientName" name="patientName" readonly><br><br>
-
-                    <h3>Seleccionar Médico Solicitante</h3>
-                    <label for="doctorName">Nombre del Médico Solicitante</label>
-                    <select id="doctorName" name="doctorName" required>
-                        <option value="" disabled selected>Seleccione un médico</option>
-                        <option value="Dr. Rodriguez" data-matricula="MP1234">Dr. Rodriguez</option>
-                        <option value="Dra. Garcia" data-matricula="MP5678">Dra. Garcia</option>
-                        <option value="Dr. Perez" data-matricula="MP9101">Dr. Perez</option>
+                <h1>Buscar Diagnósticos</h1><br><br>
+                <form method="POST" id="search-form">
+                    <h3>Seleccionar Opción de Búsqueda</h3>
+                    <label for="opcionDeBusqueda">Opción de Búsqueda</label>
+                    <select id="opcionDeBusqueda" name="opcionDeBusqueda" required>
+                        <option value="" disabled selected>Buscar por: </option>
+                        <option value="dni" data-opcion="Ingresar DNI del paciente">DNI de Paciente</option>
+                        <option value="matricula" data-opcion="Ingresar matrícula del médico">Matrícula del Médico
+                        </option>
+                        <option value="idRX" data-opcion="Ingresar ID de radiografía">ID de Radiografía</option>
                     </select><br><br>
+                    <input type="text" id="filtroDeBusqueda" name="search_value" placeholder="Elegir opción de búsqueda"
+                        required><br>
+                    <button class="btn" type="submit">Buscar</button>
 
-                    <label for="doctorMatricula">Matrícula del Médico</label>
-                    <input type="text" id="doctorMatricula" name="doctorMatricula" readonly><br><br>
+                    <!-- Contenedor para mostrar el nombre del paciente -->
+                    <div id="patient-name-container"></div>
 
-                    <h3>Seleccionar Imagen</h3>
-                    <label for="imageInput">Radiografía de tórax</label>
-                    <input type="file" id="imageInput" name="imageInput" accept="image/*" required>
-                    <img id="imagen" alt="Vista previa de la imagen seleccionada"><br><br>
-                    <button class="btn" id="predictButton" type="submit">Predecir</button>
+                    <!-- Contenedor de imágenes -->
+                    <div id="radiography-container" class="image-list">
+                        <!-- Aquí se agregarán las imágenes dinámicamente -->
+                    </div>
+                    <!-- Fin del contenedor de imágenes -->
+
+                    <button class="btn" id="LimpiarButton1" type="button"
+                        onclick="document.getElementById('search-form').reset()">Borrar</button>
+                    <button class="btn" id="volverButton" type="button" onclick="window.history.back()">Volver</button>
                 </form>
-                <div id="loading" style="display: none;">Procesando imagen...</div>
-                <div id="result">
-                    <!--  <h2>Resultado De La Predicción</h2>
-                    <table id="predictionTable">
-                        <thead>
-                            <tr>
-                                <th>Predicción</th>
-                                <th>Probabilidad</th>
-                                <th>Presición</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="predictionTableBody"></tbody>
-                    </table>-->
-                </div>
-                <button class="btn" id="LimpiarButton" type="button">Borrar</button>
-                <button class="btn" id="volverButton" type="button"
-                    onclick="window.location.href='./vistaTecnico.html'">Volver</button>
             </div>
         </div>
     </div>
+
+    <!-- Modal para el popup de la imagen -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="zoom-img">
+            <img id="modal-image" class="modal-content" alt="Imagen ampliada">
+        </div>
+    </div>
+
     <footer class="footer intranet-footer">
         <hr class="intranet-footer__hr">
         <div class="intranet-footer__copy">
-            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente
+            © Nepotti, Sivori, Rodriguez - Patente pendiente
         </div>
     </footer>
-
-
-    <script src="js/app.js"></script>
+    <script src="js/searchTecnico.js"></script>
     <script>
         const tecnico = localStorage.getItem('nombreTecnico');
         document.getElementById("nombreTecnico").textContent = tecnico;

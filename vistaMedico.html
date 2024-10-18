@@ -4,33 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torax iA - Login</title>
     <link rel="icon" type="image/vnd.microsoft.icon" href="./assets/img/favicon.ico">
+    <title>Torax iA</title>
     <link href="./css/style.css" rel="stylesheet">
-
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('passwordInput');
-            const eyeIcon = document.getElementById('eyeIcon');
-
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.innerHTML = `<path d="M12 6.5C8.83 6.5 6.07 8.11 4.5 10.5a7.507 7.507 0 00-2.25 4.5c.75 2.11 2.43 3.76 4.47 4.43a9.489 9.489 0 005.28 0c2.04-.67 3.72-2.32 4.47-4.43a7.507 7.507 0 00-2.25-4.5C17.93 8.11 15.17 6.5 12 6.5zm0 9a4.5 4.5 0 110-9 4.5 4.5 0 010 9zm0-7a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>`;
-            } else {
-                passwordInput.type = "password";
-                eyeIcon.innerHTML = `<path d="M12 4.5C7.26 4.5 3.27 7.61 1.5 12c1.77 4.39 5.76 7.5 10.5 7.5s8.73-3.11 10.5-7.5c-1.77-4.39-5.76-7.5-10.5-7.5zm0 12a4.5 4.5 0 110-9 4.5 4.5 0 010 9zm0-2a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/>`;
-            }
-        }
-
-    </script>
-
 </head>
 
 <body>
-    <div class="content-wrapper"> <!-- Contenedor padre para flexbox -->
+    <div class="content-wrapper">
         <div class="col col-12 col-lg-7">
-            <div class="card intranet-card intranet-card--left ">
-                <div class="card-body intranet-card__body">
+            <div class="card intranet-card intranet-card--left">
+                <div class="card-body">
                     <div class="logo">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 346.286 80.912">
                             <defs>
@@ -347,32 +330,37 @@
                             </g>
                         </svg>
                     </div>
-                    <h1 class="titulo">TORAX IA</h1>
-                    <h2 class="bajada">LOGIN</h2>
+                    <h1 class="titulo">TORAX iA</h1>
+                    <h1 class="bajada">MÉDICO</h1>
+
+                    <p>Médico: <span id="nombreMedico"></span></p>
+                    <p>Matrícula: <span id="matriculaMedico"></span></p>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="botonera">
-                <form method="POST">
-                    <input type="text" name="username" placeholder="Nombre de Usuario" required><br><br>
-                    <div class="password-wrapper">
-                        <input type="password" name="password" id="passwordInput" placeholder="Contraseña" required>
-                        <span class="toggle-password" onclick="togglePassword()"></span>
-                    </div>
-                    <button class="btn" type="submit" onclick="window.location.href='./index.html'">Inciar
-                        Sesión</button>
-                </form>
+
+                <button class="btn" onclick="window.location.href='./searchMedico.html'">Ver Radiografías</button>
+                <button class="btn" onclick="window.location.href='./index.html'">Cerrar Sesión</button>
             </div>
         </div>
     </div>
-    <footer class="footer intranet-footer">
-        <hr class="intranet-footer__hr">
-        <div class="intranet-footer__copy">
-            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente.
-        </div>
-    </footer>
 
+    <footer class="footer">
+        <hr>
+        <div>© Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente</div>
+    </footer>
+    <script src="js/app.js"></script>
+    <script>
+        // Recuperar los datos del localStorage o sessionStorage
+        const nombre = localStorage.getItem('nombreMedico');
+        const matricula = localStorage.getItem('matriculaMedico');
+
+        document.getElementById("nombreMedico").textContent = nombre;
+        document.getElementById("matriculaMedico").textContent = matricula;
+
+    </script>
 </body>
 
 </html>

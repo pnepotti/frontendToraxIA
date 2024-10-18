@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torax iA - Login</title>
     <link rel="icon" type="image/vnd.microsoft.icon" href="./assets/img/favicon.ico">
-    <title>Torax iA</title>
     <link href="./css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="content-wrapper">
+    <div class="content-wrapper"> <!-- Contenedor padre para flexbox -->
         <div class="col col-12 col-lg-7">
-            <div class="card intranet-card intranet-card--left">
-                <div class="card-body">
+            <div class="card intranet-card intranet-card--left ">
+                <div class="card-body intranet-card__body">
                     <div class="logo">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 346.286 80.912">
                             <defs>
@@ -330,24 +330,33 @@
                             </g>
                         </svg>
                     </div>
-                    <h1 class="titulo">TORAX iA</h1>
-                    <h2 class="bajada">BIENVENIDO</h2>
+                    <h1 class="titulo">TORAX IA</h1>
+                    <h2 class="bajada">LOGIN</h2>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="botonera">
-                <button class="btn" onclick="window.location.href='./predictions.html'">Cargar Imagen</button>
-                <button class="btn" onclick="window.location.href='./search.html'">Buscar Diagnósticos</button>
-                <button class="btn" onclick="window.location.href='./login.html'">Cerrar Sesión</button>
+                <form id="loginForm">
+                    <br>
+                    <input type="text" name="username" id="username" placeholder="Nombre de Usuario" required><br><br>
+                    <div class="password-wrapper">
+                        <input type="password" name="password" id="passwordInput" placeholder="Contraseña" required>
+                        <span class="toggle-password"></span>
+                    </div>
+                    <button class="btn" type="submit" id="login">Inciar
+                        Sesión</button>
+                </form>
             </div>
         </div>
     </div>
-
-    <footer class="footer">
-        <hr>
-        <div>© Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente.</div>
+    <footer class="footer intranet-footer">
+        <hr class="intranet-footer__hr">
+        <div class="intranet-footer__copy">
+            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente
+        </div>
     </footer>
+    <script src="js/login.js"></script>
 </body>
 
 </html>

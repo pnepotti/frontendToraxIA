@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/vnd.microsoft.icon" href="./assets/img/favicon.ico">
-    <title>Torax iA - Búsqueda de diagnósticos</title>
+    <title>Torax iA</title>
     <link href="./css/style.css" rel="stylesheet">
 
 </head>
 
 <body>
-    <div class="content-wrapper"> <!-- Contenedor padre para flexbox -->
+    <div class="content-wrapper">
         <div class="col col-12 col-lg-7">
-            <div class="card intranet-card intranet-card--left ">
-                <div class="card-body intranet-card__body">
+            <div class="card intranet-card intranet-card--left">
+                <div class="card-body">
                     <div class="logo">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 346.286 80.912">
                             <defs>
@@ -331,36 +331,30 @@
                             </g>
                         </svg>
                     </div>
-                    <h1 class="titulo">TORAX IA</h1>
-                    <h2 class="bajada">BUSCADOR</h2>
+                    <h1 class="titulo">TORAX iA</h1>
+                    <h1 class="bajada">TÉCNICO RADIÓLOGO</h1>
+                    <p>Radiólogo: <span id="nombreTecnico"></span></p>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="botonera">
-                <h1>Buscar Diagnósticos</h1><br><br>
-                <form method="POST" id="search-form">
-                    <input type="text" id="dni" name="search_value" placeholder="Ingresar DNI del paciente"
-                        required><br>
-                    <button class="btn" type="submit">Buscar</button>
-                    <button class="btn" id="LimpiarButton1" type="button"
-                        onclick="document.getElementById('search-form').reset()">Borrar</button>
-                    <button class="btn" id="volverButton" type="button"
-                        onclick="window.location.href='./index.html'">Volver</button>
-
-
-                </form>
+                <button class="btn" onclick="window.location.href='./predictions.html'">Cargar Radiografía</button>
+                <button class="btn" onclick="window.location.href='./searchTecnico.html'">Buscar Radiografía</button>
+                <button class="btn" onclick="window.location.href='./index.html'">Cerrar Sesión</button>
             </div>
         </div>
     </div>
-    <footer class="footer intranet-footer">
-        <hr class="intranet-footer__hr">
-        <div class="intranet-footer__copy">
-            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente.
-        </div>
-    </footer>
 
-    <script src="js/search.js"></script>
+    <footer class="footer">
+        <hr>
+        <div>© Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente</div>
+    </footer>
+    <script src="js/app.js"></script>
+    <script>
+        const tecnico = localStorage.getItem('nombreTecnico');
+        document.getElementById("nombreTecnico").textContent = tecnico;
+    </script>
 </body>
 
 </html>
