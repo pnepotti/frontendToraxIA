@@ -25,6 +25,39 @@ html {
     /* Oculta el scroll horizontal */
 }
 
+/* Estilos para la campana de notificaciones */
+.notification-icon {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.notification-icon i {
+    font-size: 26px;
+    /* Tamaño de la campana */
+    color: rgb(111, 110, 110);
+}
+
+/* Estilos para el puntito rojo de notificación */
+.notification-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+    /* Ocultado por defecto */
+}
+
+/* Mostrar la notificación cuando haya mensajes */
+.notification-badge.active {
+    display: block;
+}
+
 .content-wrapper {
     display: flex;
     align-items: stretch;
@@ -62,10 +95,6 @@ html {
     height: auto;
     border-radius: 4px;
     cursor: pointer;
-}
-
-#validarEnfermedad {
-    display: none;
 }
 
 ul {
@@ -198,6 +227,17 @@ form {
     width: 100%;
 }
 
+.card-body p {
+    text-align: center;
+}
+
+.card-image li {
+    text-align: center;
+}
+
+#patient-name-container h3 {
+    text-align: center;
+}
 
 /* Estilo del popup */
 

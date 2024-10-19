@@ -4,6 +4,50 @@ const baseUrl = 'http://localhost:8000'; // Cambiar en producción
 const modal = document.getElementById('myModal');
 const modalImg = document.getElementById('modal-image');
 const closeBtn = document.getElementsByClassName('close')[0];
+const patientNameContainer = document.getElementById('patient-name-container');
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationIcon = document.getElementById('notificationIcon');
+
+    // Simulación de una solicitud Fetch a una API
+    async function checkNotifications() {
+        try {
+            const response = await fetch(`${baseUrl}/diagnostics/api/images-by-matricula-null-diagnostic/?matricula=${matricula}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    console.log('No se encontraron radiografías.');
+                } else {
+                    throw new Error(`Error en la solicitud: ${response.status}`);
+                }
+                return;
+            }
+
+            const data = await response.json();
+
+            // Verificar si los datos no están vacíos
+            if (data.length > 0) {
+                notificationBadge.classList.add('active'); // Mostrar el puntito rojo
+            } else {
+                notificationBadge.classList.remove('active'); // Ocultar el puntito rojo si no hay notificaciones
+            }
+        } catch (error) {
+            console.error('Error al verificar notificaciones:', error);
+        }
+    }
+
+    // Llamar a la función para verificar las notificaciones al cargar la página
+    checkNotifications();
+
+    // Manejar el clic en el ícono de notificaciones
+    notificationIcon.addEventListener('click', function () {
+        // Ocultar el punto rojo al hacer clic en la campana
+        notificationBadge.classList.remove('active');
+    });
+});
+
 
 document.getElementById('search-form-medico').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -35,7 +79,106 @@ document.getElementById('search-form-medico').addEventListener('submit', async f
         }
 
         const data = await response.json();
+        // Mostrar el nombre del paciente, si está en la respuesta
 
+        const patientName = data.radiographies[0].patient_name || "Paciente no encontrado"; // Cambiar esto si el nombre tiene otro campo
+        patientNameContainer.innerHTML = `<h3>Paciente: ${patientName}</h3>`;
+
+        displayRadiographiesDNI(data.radiographies);
+
+    } catch (error) {
+        console.error('Error en la búsqueda:', error);
+    } finally {
+        // Mostrar todas las imágenes al inicio
+        const elementos = document.getElementsByClassName("card-image");
+        for (let i = 0; i < elementos.length; i++) {
+            elementos[i].style.display = "block";
+        }
+    }
+});
+
+function displayRadiographiesDNI(radiographies) {
+    const container = document.getElementById('radiography-container');
+    container.innerHTML = ''; // Limpiar el contenedor
+
+    if (radiographies.length === 0) {
+        container.innerHTML = '<p>No se encontraron radiografías para este paciente.</p>';
+        return;
+    }
+
+    radiographies.forEach(radiography => {
+        const radiographyElement = document.createElement('div');
+        radiographyElement.classList.add('card-image');
+
+        const fullImageUrl = `${baseUrl}/media/${radiography.image_url.split('media/')[1]}`;
+        console.log(radiography.diagnostico);
+        const predictionsList = radiography.predictions.map(prediction => `
+            <li>
+                <br>
+                <strong>Enfermedad:</strong> ${prediction.disease}<br>
+                <strong>Probabilidad:</strong> ${(prediction.probability * 100).toFixed(1)}%<br>
+                <strong>Confianza:</strong> ${(prediction.confidence * 100).toFixed(1)}% ${prediction.confidence > 0.7 ? '- Alta' : '- Baja'}<br>
+                <strong>Incertidumbre:</strong> ${(prediction.entropy * 100).toFixed(1)}% ${prediction.entropy > 0.5 ? '- Alta' : '- Baja'}<br><br>
+
+                ${radiography.diagnostico === null ? `
+                <div id="validarEnfermedad">
+                    <strong>Validar diagnóstico: </strong>
+                    <select id="enfermedadVal" name="enfermedadVal">
+                        <option value="" disabled selected>Seleccionar enfermedad</option>
+                        <option value="Normal" data-enfer="Normal">Normal</option>
+                        <option value="Pneumonia" data-enfer="Pneumonia">Pneumonia</option>
+                        <option value="Covid" data-enfer="Covid19">Covid</option>
+                        <option value="Tuberculosis" data-enfer="Tuberculosis">Tuberculosis</option>
+                        <option value="Pneumothorax" data-enfer="Pneumothorax">Pneumothorax</option>
+                        <option value="Otro" data-enfer="Otro">Otro</option>
+                    </select><br><br>
+                    <strong>Enfermedad: </strong><br>
+                    <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                </div>
+                ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
+            </li>
+        `).join('');
+
+        radiographyElement.innerHTML = `
+            <img src="${fullImageUrl}" alt="Radiografía ID: ${radiography.radiography_id}" class="thumbnail" onclick="openModal('${fullImageUrl}')">
+            <ul>
+                <li><strong>ID de radiografia:</strong> ${radiography.radiography_id}</li>
+                <li><strong>Fecha:</strong> ${new Date(radiography.uploaded_at).toLocaleDateString()}</li>
+                ${predictionsList}
+            </ul>
+        `;
+
+        container.appendChild(radiographyElement);
+    });
+}
+
+document.getElementById('ImgSinDiag').addEventListener('click', async function (e) {
+    e.preventDefault();
+    const container = document.getElementById('radiography-container');
+    container.innerHTML = ''; // Limpiar el contenedor
+    const matricula = localStorage.getItem('matriculaMedico');
+    // Validaciones básicas
+    if (!matricula) {
+        alert('Por favor, ingrese como médico.');
+        return;
+    }
+
+    try {
+        // Actualizar la URL para incluir Matrícula
+
+        const response = await fetch(`${baseUrl}/diagnostics/api/images-by-matricula-null-diagnostic/?matricula=${matricula}`);
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                container.innerHTML = '<p>No se encontraron radiografías.</p>';
+            } else {
+                throw new Error(`Error en la solicitud: ${response.status}`);
+            }
+            return;
+        }
+
+        const data = await response.json();
+        patientNameContainer.innerHTML = '';
 
         displayRadiographies(data.radiographies);
 
@@ -65,7 +208,7 @@ function displayRadiographies(radiographies) {
         radiographyElement.classList.add('card-image');
 
         const fullImageUrl = `${baseUrl}/media/${radiography.image_url.split('media/')[1]}`;
-
+        console.log(radiography.diagnostico);
         const predictionsList = radiography.predictions.map(prediction => `
             <li>
                 <br>
@@ -73,8 +216,11 @@ function displayRadiographies(radiographies) {
                 <strong>Probabilidad:</strong> ${(prediction.probability * 100).toFixed(1)}%<br>
                 <strong>Confianza:</strong> ${(prediction.confidence * 100).toFixed(1)}% ${prediction.confidence > 0.7 ? '- Alta' : '- Baja'}<br>
                 <strong>Incertidumbre:</strong> ${(prediction.entropy * 100).toFixed(1)}% ${prediction.entropy > 0.5 ? '- Alta' : '- Baja'}<br><br>
-                <strong>Validar diagnóstico: </strong>
-                <select id="enfermedadVal" name="enfermedadVal">
+
+                ${radiography.diagnostico === null ? `
+                <div id="validarEnfermedad">
+                    <strong>Validar diagnóstico: </strong>
+                    <select id="enfermedadVal" name="enfermedadVal">
                         <option value="" disabled selected>Seleccionar enfermedad</option>
                         <option value="Normal" data-enfer="Normal">Normal</option>
                         <option value="Pneumonia" data-enfer="Pneumonia">Pneumonia</option>
@@ -82,18 +228,19 @@ function displayRadiographies(radiographies) {
                         <option value="Tuberculosis" data-enfer="Tuberculosis">Tuberculosis</option>
                         <option value="Pneumothorax" data-enfer="Pneumothorax">Pneumothorax</option>
                         <option value="Otro" data-enfer="Otro">Otro</option>
-                </select><br><br>
-                <div id="validarEnfermedad">
+                    </select><br><br>
                     <strong>Enfermedad: </strong><br>
                     <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
                 </div>
-             </li>
+                ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
+            </li>
         `).join('');
 
         radiographyElement.innerHTML = `
             <img src="${fullImageUrl}" alt="Radiografía ID: ${radiography.radiography_id}" class="thumbnail" onclick="openModal('${fullImageUrl}')">
             <ul>
-                <li><strong>Médico:</strong> ${radiography.doctor_name}</li>
+                <li><strong>Paciente:</strong> ${radiography.patient_name}</li>
+                <li><strong>ID de radiografia:</strong> ${radiography.radiography_id}</li>
                 <li><strong>Fecha:</strong> ${new Date(radiography.uploaded_at).toLocaleDateString()}</li>
                 ${predictionsList}
             </ul>
@@ -102,6 +249,8 @@ function displayRadiographies(radiographies) {
         container.appendChild(radiographyElement);
     });
 }
+
+
 
 // Abrir modal para mostrar la imagen
 function openModal(imageSrc) {
@@ -161,3 +310,6 @@ document.getElementById('LimpiarButton1').addEventListener('click', function () 
         elementos[i].style.display = "none";
     }
 })
+
+
+

@@ -45,7 +45,6 @@ document.getElementById('search-form').addEventListener('submit', async function
 
         const data = await response.json();
 
-        console.log(data.radiographies[0].patient_name);
 
         // Mostrar el nombre del paciente, si está en la respuesta
 
