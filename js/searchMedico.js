@@ -9,7 +9,8 @@ const patientNameContainer = document.getElementById('patient-name-container');
 
 document.addEventListener('DOMContentLoaded', function () {
     const notificationBadge = document.getElementById('notificationBadge');
-    const notificationIcon = document.getElementById('notificationIcon');
+    const notificationIcon = document.getElementById('notificationIcon'); // Actualizado a 'notificationIcon'
+    const matricula = localStorage.getItem('matriculaMedico'); // Recuperar la matrícula correctamente
 
     // Simulación de una solicitud Fetch a una API
     async function checkNotifications() {
@@ -25,14 +26,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const data = await response.json();
+            const data = await response.json(); // Asignar los datos a la variable data aquí
 
             // Verificar si los datos no están vacíos
-            if (data.length > 0) {
+            if (data.radiographies && data.radiographies.length > 0) {
                 notificationBadge.classList.add('active'); // Mostrar el puntito rojo
             } else {
                 notificationBadge.classList.remove('active'); // Ocultar el puntito rojo si no hay notificaciones
             }
+
+            // Manejar el clic en el ícono de notificaciones una vez que los datos están disponibles
+            notificationIcon.addEventListener('click', function () {
+                // Ocultar el punto rojo al hacer clic en la campana
+                notificationBadge.classList.remove('active');
+
+                // Verificar si los datos están disponibles
+                if (!data || !data.radiographies || data.radiographies.length === 0) {
+                    alert('No hay radiografías disponibles para mostrar.');
+                    return;
+                }
+
+                const container = document.getElementById('radiography-container');
+                container.innerHTML = ''; // Limpiar el contenedor
+
+                // Validaciones básicas
+                if (!matricula) {
+                    alert('Por favor, ingrese como médico.');
+                    return;
+                }
+
+                patientNameContainer.innerHTML = `<h3>Radiografías sin diagnosticar</h3>`;
+
+                // Mostrar las radiografías usando la función displayRadiographies
+                displayRadiographies(data.radiographies);
+
+                // Mostrar todas las imágenes al inicio
+                const elementos = document.getElementsByClassName("card-image");
+                for (let i = 0; i < elementos.length; i++) {
+                    elementos[i].style.display = "block";
+                }
+            });
+
         } catch (error) {
             console.error('Error al verificar notificaciones:', error);
         }
@@ -40,12 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Llamar a la función para verificar las notificaciones al cargar la página
     checkNotifications();
-
-    // Manejar el clic en el ícono de notificaciones
-    notificationIcon.addEventListener('click', function () {
-        // Ocultar el punto rojo al hacer clic en la campana
-        notificationBadge.classList.remove('active');
-    });
 });
 
 
@@ -132,8 +160,10 @@ function displayRadiographiesDNI(radiographies) {
                         <option value="Pneumothorax" data-enfer="Pneumothorax">Pneumothorax</option>
                         <option value="Otro" data-enfer="Otro">Otro</option>
                     </select><br><br>
-                    <strong>Enfermedad: </strong><br>
-                    <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                    <div id="otraEnfermedad">
+                        <strong>Enfermedad: </strong><br>
+                        <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                    </div>
                 </div>
                 ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
             </li>
@@ -151,47 +181,6 @@ function displayRadiographiesDNI(radiographies) {
         container.appendChild(radiographyElement);
     });
 }
-
-document.getElementById('ImgSinDiag').addEventListener('click', async function (e) {
-    e.preventDefault();
-    const container = document.getElementById('radiography-container');
-    container.innerHTML = ''; // Limpiar el contenedor
-    const matricula = localStorage.getItem('matriculaMedico');
-    // Validaciones básicas
-    if (!matricula) {
-        alert('Por favor, ingrese como médico.');
-        return;
-    }
-
-    try {
-        // Actualizar la URL para incluir Matrícula
-
-        const response = await fetch(`${baseUrl}/diagnostics/api/images-by-matricula-null-diagnostic/?matricula=${matricula}`);
-
-        if (!response.ok) {
-            if (response.status === 404) {
-                container.innerHTML = '<p>No se encontraron radiografías.</p>';
-            } else {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
-            return;
-        }
-
-        const data = await response.json();
-        patientNameContainer.innerHTML = '';
-
-        displayRadiographies(data.radiographies);
-
-    } catch (error) {
-        console.error('Error en la búsqueda:', error);
-    } finally {
-        // Mostrar todas las imágenes al inicio
-        const elementos = document.getElementsByClassName("card-image");
-        for (let i = 0; i < elementos.length; i++) {
-            elementos[i].style.display = "block";
-        }
-    }
-});
 
 // Mostrar las radiografías en el contenedor
 function displayRadiographies(radiographies) {
@@ -229,8 +218,10 @@ function displayRadiographies(radiographies) {
                         <option value="Pneumothorax" data-enfer="Pneumothorax">Pneumothorax</option>
                         <option value="Otro" data-enfer="Otro">Otro</option>
                     </select><br><br>
-                    <strong>Enfermedad: </strong><br>
-                    <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                    <div id="otraEnfermedad">
+                        <strong>Enfermedad: </strong><br>
+                        <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                    </div>
                 </div>
                 ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
             </li>
@@ -249,8 +240,6 @@ function displayRadiographies(radiographies) {
         container.appendChild(radiographyElement);
     });
 }
-
-
 
 // Abrir modal para mostrar la imagen
 function openModal(imageSrc) {
@@ -304,6 +293,7 @@ window.onclick = function (event) {
 }
 document.getElementById('LimpiarButton1').addEventListener('click', function () {
 
+    patientNameContainer.innerHTML = '';
     // Ocultar las radiografías
     const elementos = document.getElementsByClassName("card-image");
     for (let i = 0; i < elementos.length; i++) {

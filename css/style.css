@@ -21,8 +21,9 @@ html {
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    user-select: none;
     /*overflow-x: hidden;*/
-    /* Oculta el scroll horizontal */
+
 }
 
 /* Estilos para la campana de notificaciones */
@@ -47,7 +48,7 @@ html {
     right: 0px;
     width: 10px;
     height: 10px;
-    background-color: red;
+    background-color: rgb(225, 5, 5);
     border-radius: 50%;
     display: none;
     /* Ocultado por defecto */
@@ -199,6 +200,10 @@ form {
 
 .btn:hover {
     background-color: var(--secondary-color);
+}
+
+#otraEnfermedad {
+    display: none;
 }
 
 #imagen {
