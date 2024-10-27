@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Mostrar el resultado del diagnóstico
 
                 document.getElementById('result').innerHTML = `
+    <div><strong>ID de radiografía:</strong> ${data.radiography_id}</div>            
     <div><strong>Diagnóstico:</strong> ${data.diagnosis}</div>
     <div><strong>Probabilidad:</strong> ${data.probability.toFixed(2)}</div>
     <div><strong>Confianza:</strong> ${data.confidence.toFixed(2)}</div>

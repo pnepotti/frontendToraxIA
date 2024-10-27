@@ -28,6 +28,7 @@ html {
 
 /* Estilos para la campana de notificaciones */
 .notification-icon {
+    z-index: 10;
     position: fixed;
     top: 10px;
     right: 10px;
@@ -82,7 +83,7 @@ html {
 }
 
 .card-image {
-    width: 180px;
+    width: 100%;
     padding: 10px;
     /*border: 1px solid #ccc;*/
     border-radius: 8px;

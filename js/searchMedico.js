@@ -5,7 +5,7 @@ const modal = document.getElementById('myModal');
 const modalImg = document.getElementById('modal-image');
 const closeBtn = document.getElementsByClassName('close')[0];
 const patientNameContainer = document.getElementById('patient-name-container');
-
+const container = document.getElementById('radiography-container');
 
 document.addEventListener('DOMContentLoaded', function () {
     const notificationBadge = document.getElementById('notificationBadge');
@@ -79,49 +79,90 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.getElementById('search-form-medico').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const container = document.getElementById('radiography-container');
+
+    patientNameContainer.innerHTML = '';
     container.innerHTML = ''; // Limpiar el contenedor
 
-    const dniInputMedico = document.getElementById('dniInputMedico').value;
+
     const matricula = localStorage.getItem('matriculaMedico');
 
+    const selectedValue = document.getElementById('opcionDeBusqueda').value;
+    const searchValue = document.getElementById('filtroDeBusqueda').value;
 
     // Validaciones básicas
-    if (!dniInputMedico) {
-        alert('Por favor, complete el campo DNI o ingrese como médico.');
+    if (!searchValue) {
+        alert('Por favor, completa el campo');
         return;
     }
 
-    try {
-        // Actualizar la URL para incluir tanto DNI como Matrícula
 
-        const response = await fetch(`${baseUrl}/diagnostics/api/images-by-matricula-dni/?dniInputMedico=${dniInputMedico}&matricula=${matricula}`);
+    // Aquí puedes hacer acciones específicas dependiendo del valor seleccionado
+    if (selectedValue === 'dni') {
+        console.log('Buscar por DNI');
+        try {
+            // Actualizar la URL para incluir tanto DNI como Matrícula
 
-        if (!response.ok) {
-            if (response.status === 404) {
-                container.innerHTML = '<p>No se encontraron radiografías.</p>';
-            } else {
-                throw new Error(`Error en la solicitud: ${response.status}`);
+            const response = await fetch(`${baseUrl}/diagnostics/api/images/?dni=${searchValue}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    container.innerHTML = '<p>No se encontraron radiografías.</p>';
+                } else {
+                    throw new Error(`Error en la solicitud: ${response.status}`);
+                }
+                return;
             }
-            return;
+
+            const data = await response.json();
+            // Mostrar el nombre del paciente, si está en la respuesta
+
+            const patientName = data.radiographies[0].patient_name || "Paciente no encontrado"; // Cambiar esto si el nombre tiene otro campo
+            patientNameContainer.innerHTML = `<h3>Paciente: ${patientName}</h3>`;
+
+            displayRadiographiesDNI(data.radiographies);
+
+        } catch (error) {
+            console.error('Error en la búsqueda:', error);
+        } finally {
+            // Mostrar todas las imágenes al inicio
+            const elementos = document.getElementsByClassName("card-image");
+            for (let i = 0; i < elementos.length; i++) {
+                elementos[i].style.display = "block";
+            }
         }
 
-        const data = await response.json();
-        // Mostrar el nombre del paciente, si está en la respuesta
 
-        const patientName = data.radiographies[0].patient_name || "Paciente no encontrado"; // Cambiar esto si el nombre tiene otro campo
-        patientNameContainer.innerHTML = `<h3>Paciente: ${patientName}</h3>`;
 
-        displayRadiographiesDNI(data.radiographies);
+    } else if (selectedValue === 'idRx') {
+        console.log('Buscar por Matrícula del médico');
+        try {
+            const response = await fetch(`${baseUrl}/diagnostics/api/images-by-idRx/?idRx=${searchValue}`);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    container.innerHTML = '<p>No se encontró la radiografía.</p>';
+                } else {
+                    throw new Error(`Error en la solicitud: ${response.status}`);
+                }
+                return;
+            }
 
-    } catch (error) {
-        console.error('Error en la búsqueda:', error);
-    } finally {
-        // Mostrar todas las imágenes al inicio
-        const elementos = document.getElementsByClassName("card-image");
-        for (let i = 0; i < elementos.length; i++) {
-            elementos[i].style.display = "block";
+            const data = await response.json();
+
+
+
+            displayRadiographyIdRx(data.radiography);
+
+        } catch (error) {
+            console.error('Error en la búsqueda:', error);
+        } finally {
+            // Mostrar todas las imágenes al inicio
+            const elementos = document.getElementsByClassName("card-image");
+            for (let i = 0; i < elementos.length; i++) {
+                elementos[i].style.display = "block";
+            }
         }
+
+
     }
 });
 
@@ -164,6 +205,7 @@ function displayRadiographiesDNI(radiographies) {
                         <strong>Enfermedad: </strong><br>
                         <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
                     </div>
+                    <button class="btn" style="width:50%">Validar</button>
                 </div>
                 ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
             </li>
@@ -173,6 +215,7 @@ function displayRadiographiesDNI(radiographies) {
             <img src="${fullImageUrl}" alt="Radiografía ID: ${radiography.radiography_id}" class="thumbnail" onclick="openModal('${fullImageUrl}')">
             <ul>
                 <li><strong>ID de radiografia:</strong> ${radiography.radiography_id}</li>
+                <li><strong>Médico:</strong> ${radiography.doctor_name}</li>
                 <li><strong>Fecha:</strong> ${new Date(radiography.uploaded_at).toLocaleDateString()}</li>
                 ${predictionsList}
             </ul>
@@ -222,6 +265,7 @@ function displayRadiographies(radiographies) {
                         <strong>Enfermedad: </strong><br>
                         <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
                     </div>
+                    <button class="btn" style="width:50%">Validar</button>
                 </div>
                 ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
             </li>
@@ -239,6 +283,71 @@ function displayRadiographies(radiographies) {
 
         container.appendChild(radiographyElement);
     });
+}
+
+
+function displayRadiographyIdRx(radiography) {
+    const container = document.getElementById('radiography-container');
+    container.innerHTML = ''; // Limpiar el contenedor
+
+    // Si no se encuentra la radiografía (el objeto es nulo o indefinido)
+    if (!radiography) {
+        container.innerHTML = '<p>No se encontró la radiografía.</p>';
+        return;
+    }
+
+    const radiographyElement = document.createElement('div');
+    radiographyElement.classList.add('card-image');
+
+    // Usar la URL completa de la imagen
+    const fullImageUrl = radiography.image_url;
+
+    // Verificar si hay predicciones disponibles
+    const predictionsList = radiography.predictions && radiography.predictions.length > 0
+        ? radiography.predictions.map(prediction => `
+            <li>
+                <strong>Enfermedad:</strong> ${prediction.disease}<br>
+                <strong>Probabilidad:</strong> ${(prediction.probability * 100).toFixed(1)}%<br>
+                <strong>Confianza:</strong> ${(prediction.confidence * 100).toFixed(1)}% ${prediction.confidence > 0.7 ? '- Alta' : '- Baja'}<br>
+                <strong>Incertidumbre:</strong> ${(prediction.entropy * 100).toFixed(1)}% ${prediction.entropy > 0.5 ? '- Alta' : '- Baja'}<br><br>
+                ${radiography.diagnostico === null ? `
+                <div id="validarEnfermedad">
+                    <strong>Validar diagnóstico: </strong>
+                    <select id="enfermedadVal" name="enfermedadVal">
+                        <option value="" disabled selected>Seleccionar enfermedad</option>
+                        <option value="Normal" data-enfer="Normal">Normal</option>
+                        <option value="Pneumonia" data-enfer="Pneumonia">Pneumonia</option>
+                        <option value="Covid" data-enfer="Covid19">Covid</option>
+                        <option value="Tuberculosis" data-enfer="Tuberculosis">Tuberculosis</option>
+                        <option value="Pneumothorax" data-enfer="Pneumothorax">Pneumothorax</option>
+                        <option value="Otro" data-enfer="Otro">Otro</option>
+                    </select><br><br>
+                    <div id="otraEnfermedad">
+                        <strong>Enfermedad: </strong><br>
+                        <input type="text" id="enfermedadValidada" name="enfermedadValidada" placeholder="Ingresar enfermedad"><br><br>
+                    </div>
+                    <button class="btn" style="width:50%">Validar</button>
+                </div>
+                ` : `<strong>Diagnóstico confirmado: </strong>${radiography.diagnostico}<br><br>`}
+            </li>
+        `).join('')
+        : '<li>No hay predicciones disponibles.</li>';
+
+    // Insertar el contenido HTML en la tarjeta de la radiografía
+    radiographyElement.innerHTML = `
+        <img src="${fullImageUrl}" alt="Radiografía ID: ${radiography.radiography_id}" class="thumbnail" onclick="openModal('${fullImageUrl}')">
+        <ul>
+            <li><strong>ID de radiografía:</strong> ${radiography.radiography_id}</li>
+            <li><strong>Médico:</strong> ${radiography.doctor_name || 'No disponible'}</li>
+            <li><strong>Paciente:</strong> ${radiography.patient_name || 'No disponible'}</li>
+            <li><strong>Diagnóstico:</strong> ${radiography.diagnostico || 'No disponible'}</li>
+            <li><strong>Fecha:</strong> ${new Date(radiography.uploaded_at).toLocaleDateString()}</li><br>
+            ${predictionsList}
+        </ul>
+    `;
+
+    // Añadir la tarjeta al contenedor
+    container.appendChild(radiographyElement);
 }
 
 // Abrir modal para mostrar la imagen
@@ -294,6 +403,7 @@ window.onclick = function (event) {
 document.getElementById('LimpiarButton1').addEventListener('click', function () {
 
     patientNameContainer.innerHTML = '';
+    container.innerHTML = '';
     // Ocultar las radiografías
     const elementos = document.getElementsByClassName("card-image");
     for (let i = 0; i < elementos.length; i++) {

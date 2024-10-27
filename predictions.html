@@ -332,7 +332,6 @@
                     </div>
                     <h1 class="titulo">TORAX iA</h1>
                     <h2 class="bajada">Diagnósticos Rx</h2>
-                    <p>Radiólogo: <span id="nombreTecnico"></span></p>
                 </div>
             </div>
         </div>
@@ -365,26 +364,12 @@
                     <label for="imageInput">Radiografía de tórax</label>
                     <input type="file" id="imageInput" name="imageInput" accept="image/*" required>
                     <img id="imagen" alt="Vista previa de la imagen seleccionada"><br><br>
+                    <div id="loading" style="display: none;">Procesando imagen...</div>
+                    <div id="result"></div>
                     <button class="btn" id="predictButton" type="submit">Guardar y Predecir</button>
                 </form>
-                <div id="loading" style="display: none;">Procesando imagen...</div>
-                <div id="result">
-                    <!--  <h2>Resultado De La Predicción</h2>
-                    <table id="predictionTable">
-                        <thead>
-                            <tr>
-                                <th>Predicción</th>
-                                <th>Probabilidad</th>
-                                <th>Presición</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="predictionTableBody"></tbody>
-                    </table>-->
-                </div>
                 <button class="btn" id="LimpiarButton" type="button">Nuevo</button>
-                <button class="btn" id="volverButton" type="button"
-                    onclick="window.location.href='./vistaTecnico.html'">Volver</button>
+                <button class="btn" id="volverButton" type="button" onclick="window.history.back()">Volver</button>
             </div>
         </div>
     </div>
@@ -397,10 +382,7 @@
 
 
     <script src="js/app.js"></script>
-    <script>
-        const tecnico = localStorage.getItem('nombreTecnico');
-        document.getElementById("nombreTecnico").textContent = tecnico;
-    </script>
+
 </body>
 
 </html>

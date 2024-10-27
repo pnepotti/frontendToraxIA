@@ -8,6 +8,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     let nombreMedico = '';
     let matriculaMedico = '';
     let nombreTecnico = '';
+    let nombreAdmin = '';
 
     switch (username) {
         case "Rodriguez":
@@ -43,7 +44,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             localStorage.setItem('nombreTecnico', nombreTecnico);
             window.location.href = './vistaTecnico.html';
             break;
-
+        case "Admin":
+            nombreAdmin = "Usuario administrador";
+            // Guardar los datos en localStorage o sessionStorage
+            localStorage.setItem('nombreAdmin', nombreAdmin);
+            window.location.href = './vistaAdministrador.html';
+            break;
         default:
             alert("Usuario y/o contraseña incorrectos");
     }

@@ -12,7 +12,7 @@
 
 <body>
     <div class="notification-icon">
-        <i id="notificationIcon" class="fa fa-bell"></i>
+        <i id="notificationIcon" class="fa fa-bell" title="Radiografías sin diagnóstico validado"></i>
         <span class="notification-badge" id="notificationBadge"></span>
     </div>
 
@@ -348,10 +348,27 @@
             <div class="botonera">
                 <h1>Buscar Radiografías</h1><br><br>
                 <form method="POST" id="search-form-medico">
+
+                    <h3>Seleccionar Opción de Búsqueda</h3>
+                    <label for="opcionDeBusqueda">Opción de Búsqueda</label>
+                    <select id="opcionDeBusqueda" name="opcionDeBusqueda" required>
+                        <option value="" disabled selected>Buscar por: </option>
+                        <option value="dni" data-opcion="Ingresar DNI del paciente">DNI de Paciente</option>
+                        <option value="idRx" data-opcion="Ingresar ID de radiografía">ID de Radiografía</option>
+                    </select><br><br>
+                    <input type="text" id="filtroDeBusqueda" name="search_value" placeholder="Elegir opción de búsqueda"
+                        required><br>
+
+
+                    <!--
                     <h3>Busqueda por DNI de Paciente</h3>
                     <input type="text" id="dniInputMedico" name="dniInputMedico" placeholder="Ingresar DNI de paciente"
-                        required><br>
+                        required><br>-->
                     <button class="btn" type="submit">Buscar</button>
+                    <button class="btn" id="LimpiarButton1" type="button"
+                        onclick="document.getElementById('search-form-medico').reset()">Nueva Búsqueda</button>
+                    <button class="btn" id="volverButton" type="button"
+                        onclick="window.location.href='./vistaMedico.html'">Volver</button>
 
                     <!-- Contenedor para mostrar el nombre del paciente -->
                     <div id="patient-name-container"></div>
@@ -361,10 +378,6 @@
                     </div>
                     <!-- Fin del contenedor de imágenes -->
 
-                    <button class="btn" id="LimpiarButton1" type="button"
-                        onclick="document.getElementById('search-form-medico').reset()">Nueva Búsqueda</button>
-                    <button class="btn" id="volverButton" type="button"
-                        onclick="window.location.href='./vistaMedico.html'">Volver</button>
                 </form>
             </div>
         </div>
@@ -381,7 +394,7 @@
     <footer class="footer intranet-footer">
         <hr class="intranet-footer__hr">
         <div class="intranet-footer__copy">
-            © Nepotti, Sivori, Rodriguez - Patente pendiente
+            © Nepotti, Sivori, Rodriguez Rodriguez - Patente pendiente
         </div>
     </footer>
 
